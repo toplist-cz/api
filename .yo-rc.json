@@ -1,8 +1,7 @@
 {
   "generator-openapi-repo": {
-    "importExistingSpec": true,
-    "importedSpec": "/home/franci/swagger",
-    "name": "TOPlist",
+    "importExistingSpec": false,
+    "name": "TOPlist Profi",
     "repo": "toplist-cz/api",
     "splitSpec": false,
     "samples": true,

@@ -1,1 +1,246 @@
-{"swagger": "2.0", "info": {"description": "", "title": "TOPlist Profi API", "contact": {"email": "helpdesk@toplist.cz"}, "version": "1.0.85"}, "basePath": "/api/v1", "schemes": ["https"], "consumes": ["application/json"], "produces": ["application/json"], "host": "profi.toplist.cz", "securityDefinitions": {"oauth": {"type": "oauth2", "flow": "implicit", "authorizationUrl": "https://profi.toplist.cz/oidc/oauth2/login/", "scopes": {"counter": "\u010cten\u00ed z\u00e1kladn\u00edch \u00fadaj\u016f, kter\u00e9 ze zobrazuj\u00ed na po\u010d\u00edtadle: n\u00e1v\u0161t\u011bvnost celkov\u00e1, dne\u0161n\u00ed a za t\u00fdden, po\u0159ad\u00ed celkov\u00e9 a v kategorii"}}, "server_key": {"type": "apiKey", "name": "serverKey", "in": "header"}}, "paths": {"/categories/": {"get": {"summary": "Seznam kategori\u00ed", "description": "\u010c\u00edseln\u00edk se v\u0161emi kategoriemi.", "tags": ["web"], "responses": {"200": {"description": "OK", "schema": {"$ref": "#/definitions/Category"}}}}}, "/code/{toplistId}": {"get": {"summary": "M\u011b\u0159\u00edc\u00ed k\u00f3d", "description": "", "parameters": [{"name": "type", "type": "string", "enum": ["blank", "logo1", "logo2", "logo3", "text", "counter", "mediumcounter", "bigcounter", "button", "square"], "in": "query", "description": "typ zobrazen\u00e9 ikony"}, {"name": "link", "type": "string", "in": "query", "enum": ["stat"], "description": "kam m\u00e1 sm\u011b\u0159ovat odkaz z po\u010d\u00edtadla. <ul><li>nevypln\u011bno - homepage TOPlistu</li><li>stat - podrobn\u00e9 statistiky str\u00e1nky</li></ul>"}, {"name": "start", "in": "query", "type": "integer", "description": "po\u010d\u00e1te\u010dn\u00ed hodnota po\u010d\u00edtadla"}, {"name": "toplistId", "in": "path", "type": "integer", "description": "TOPlist ID", "required": true}], "tags": ["web"], "responses": {"200": {"description": "M\u011b\u0159\u00edc\u00ed k\u00f3d pro konkr\u00e9tn\u00ed TOPlist ID", "schema": {"type": "object", "properties": {"code": {"type": "string", "description": "HTML m\u011b\u0159\u00edc\u00edho k\u00f3du "}}, "required": ["code"]}}, "400": {"description": "Value error"}}}}, "/code/": {"get": {"summary": "M\u011b\u0159\u00edc\u00ed k\u00f3d", "description": "Metoda slou\u017e\u00ed k z\u00edsk\u00e1n\u00ed k\u00f3du po\u010d\u00edtadla bez ur\u010den\u00ed konkr\u00e9tn\u00edho ID. M\u00edsto n\u011bj je uveden \u0159et\u011bzec <b>%toplist_id%</b>. Umo\u017e\u0148uje to nap\u0159. interaktivn\u00ed vypln\u011bn\u00ed a\u017e na stran\u011b klienta.", "parameters": [{"name": "type", "type": "string", "enum": ["blank", "logo1", "logo2", "logo3", "text", "counter", "mediumcounter", "bigcounter", "button", "square"], "in": "query", "description": "typ zobrazen\u00e9 ikony"}, {"name": "link", "type": "string", "in": "query", "enum": ["stat"], "description": "kam m\u00e1 sm\u011b\u0159ovat odkaz z po\u010d\u00edtadla. <ul><li>nevypln\u011bno - homepage TOPlistu</li><li>stat - podrobn\u00e9 statistiky str\u00e1nky</li></ul>"}, {"name": "start", "in": "query", "type": "integer", "description": "po\u010d\u00e1te\u010dn\u00ed hodnota po\u010d\u00edtadla"}], "tags": ["web"], "responses": {"200": {"description": "M\u011b\u0159\u00edc\u00ed k\u00f3d. Pouze \u0161ablona bez konkr\u00e9tn\u00edho TOPlist ID", "schema": {"type": "object", "properties": {"code": {"type": "string", "description": "HTML m\u011b\u0159\u00edc\u00edho k\u00f3du "}}, "required": ["code"]}}, "400": {"description": "Value error"}}}}, "/counter/{toplistId}": {"get": {"summary": "Po\u010d\u00edtadlo", "description": "Metoda pro z\u00edsk\u00e1n\u00ed stejn\u00fdch dat, kter\u00e9 se zobrazuj\u00ed na po\u010d\u00edtadle.", "parameters": [{"name": "toplistId", "required": true, "in": "path", "type": "integer"}], "tags": ["statistika"], "responses": {"200": {"description": "OK", "schema": {"$ref": "#/definitions/Counter"}}, "204": {"description": "\u017d\u00e1dn\u00e1 data - \u0161patn\u00e9 ID nebo je z\u00e1znam neve\u0159ejn\u00fd"}}}}, "/live/{toplistId}": {"get": {"parameters": [{"name": "toplistId", "required": true, "in": "path", "type": "integer"}, {"name": "index", "required": false, "type": "integer", "in": "query", "description": "hodnota vr\u00e1cen\u00e1 v p\u0159edchoz\u00edm dotazu nebo 0."}], "tags": ["statistika"], "responses": {"200": {"description": "M\u011b\u0159\u00edc\u00ed k\u00f3d", "schema": {"type": "object", "properties": {"code": {"type": "string", "description": "HTML m\u011b\u0159\u00edc\u00edho k\u00f3du "}}, "required": ["code"]}}, "400": {"description": "Value error"}}}}, "/site/{toplistId}": {"get": {"summary": "Informace o registrovan\u00e9m webu", "parameters": [{"name": "toplistId", "required": true, "in": "path", "type": "integer"}], "tags": ["web"], "responses": {"200": {"description": "OK", "schema": {"$ref": "#/definitions/Site"}}, "204": {"description": "\u017d\u00e1dn\u00e1 data - \u0161patn\u00e9 ID nebo je z\u00e1znam neve\u0159ejn\u00fd"}}}}, "/site": {"post": {"summary": "Registrace nov\u00e9ho webu", "parameters": [{"name": "body", "in": "body", "required": true, "schema": {"$ref": "#/definitions/NewSite"}}], "tags": ["web"], "responses": {"200": {"description": "OK", "schema": {"$ref": "#/definitions/Site"}}, "400": {"description": "Chyba vstupu"}, "753": {"description": "Vstup nen\u00ed ve form\u00e1tu JSON"}}}}, "/stat": {"post": {"description": "Nov\u00fd po\u017eadavek na statistiky.", "parameters": [{"name": "body", "required": true, "in": "body", "schema": {"$ref": "#/definitions/Stat"}}], "tags": ["statistika"], "responses": {"200": {"description": "ID of statistics task", "schema": {"type": "object", "properties": {"taskId": {"type": "string", "default": "uuid", "format": "uuid"}}, "required": ["taskId"]}}, "400": {"description": "Value error"}, "403": {"description": "Access forbidden"}}}}, "/stat/{toplistId}/{taskId}": {"get": {"parameters": [{"name": "taskId", "in": "path", "type": "string", "required": true}], "tags": ["statistika"], "responses": {"200": {"description": "ID of statistics task", "schema": {"type": "object", "properties": {"taskId": {"type": "string", "default": "uuid", "format": "uuid"}, "status": {"type": "integer", "default": 200}, "statusMessage": {"type": "string", "default": "OK"}}, "required": ["status", "statusMessage", "taskId"]}}, "400": {"description": "Value error"}}}}, "/stat/{toplistId}/visit": {"get": {"parameters": [{"name": "toplistId", "required": true, "type": "integer", "format": "int32", "in": "path"}, {"name": "dateFrom", "required": true, "type": "string", "format": "date", "in": "query"}, {"name": "dateTo", "required": true, "type": "string", "format": "date", "in": "query"}, {"name": "step", "required": true, "type": "string", "enum": ["day", "week", "month"], "in": "query"}], "tags": ["statistika"], "responses": {"200": {"description": "List of results", "schema": {"type": "object", "properties": {"data": {"type": "array", "items": {"$ref": "#/definitions/Timeline"}}}, "required": ["data"]}}, "400": {"description": "Value error"}}}}, "/toplist/{categoryKW}/{offset}/{limit}": {"get": {"summary": "Seznam web\u016f", "description": "Seznam webu podle po\u0159ad\u00ed v kategorii", "tags": ["statistika"], "parameters": [{"name": "categoryKW", "in": "path", "type": "string", "description": "Kategorie (URL)", "required": true}, {"name": "offset", "in": "path", "type": "integer", "description": "Offset v\u00fdsledk\u016f", "default": 0, "minimum": 0, "required": true}, {"name": "limit", "in": "path", "type": "integer", "default": 1000, "minimum": 1, "maximum": 10000, "description": "Po\u010det v\u00fdsledk\u016f, min. 100, max. 10000", "required": true}], "responses": {"200": {"description": "OK", "schema": {"$ref": "#/definitions/Site"}}}}}}, "definitions": {"NewSite": {"properties": {"appId": {"type": "string", "description": "ID aplikace", "example": "7d6b6472-0432-4d7d-8f1a-22fb4f8764ed"}, "url": {"type": "string", "description": "URL webu", "example": "https://www.toplist.cz"}, "title": {"type": "string", "description": "N\u00e1zev webu", "example": "TOPlist"}, "description": {"type": "string", "description": "Popisek webu", "example": "m\u011b\u0159en\u00ed n\u00e1v\u0161t\u011bvnosti"}, "categoryId": {"type": "integer", "description": "ID kategorie", "example": 1}, "email": {"type": "string", "format": "email", "description": "Kontaktn\u00ed email", "example": "helpdesk@toplist.cz"}, "report": {"type": "boolean", "description": "Pos\u00edlat ka\u017ed\u00fd t\u00fdden statistiky mailem"}, "privateStats": {"type": "boolean", "description": "Podrobn\u00e9 statistiky jen s heslem"}}, "required": ["appId", "url", "title", "description", "categoryId", "email"]}, "Site": {"properties": {"id": {"type": "integer", "description": "toplistId", "example": 1}, "url": {"type": "string", "description": "URL webu", "example": "www.toplist.cz"}, "age": {"type": "integer", "description": "\u010das od registrace ve dnech", "example": 7043}, "visitsTotal": {"type": "integer", "description": "celkov\u00fd po\u010det n\u00e1v\u0161t\u011bv od registrace", "example": 7043}, "visitsWeek": {"type": "integer", "description": "po\u010det n\u00e1v\u0161t\u011bv za posledn\u00edch 7 dn\u00ed", "example": 28}, "visitsToday": {"type": "integer", "description": "po\u010det n\u00e1v\u0161t\u011bv dnes", "example": 28}, "visitsYesterday": {"type": "integer", "description": "po\u010det n\u00e1v\u0161t\u011bv v\u010dera", "example": 17}, "estimated": {"type": "integer", "description": "odhad celkov\u00e9ho dne\u0161n\u00edho po\u010dtu n\u00e1v\u0161t\u011bv", "example": 36}, "comment": {"type": "string", "description": "popisek serveru", "example": "tento server"}, "rank": {"type": "integer", "description": "celkov\u00e9 po\u0159ad\u00ed", "example": 1}, "rankCategory": {"type": "integer", "description": "po\u0159ad\u00ed v kategorii", "example": 1}}, "required": ["id", "url", "age", "rank", "rankCategory", "visitsTotal", "visitsWeek", "visitsToday", "estimated", "comment"]}, "Counter": {"properties": {"rank": {"type": "integer", "description": "celkov\u00e9 po\u0159ad\u00ed", "example": 1}, "rankCategory": {"type": "integer", "description": "po\u0159ad\u00ed v kategorii", "example": 1}, "visitsTotal": {"type": "integer", "description": "celkov\u00fd po\u010det n\u00e1v\u0161t\u011bv od registrace", "example": 7043}, "visitsWeek": {"type": "integer", "description": "po\u010det n\u00e1v\u0161t\u011bv za posledn\u00edch 7 dn\u00ed", "example": 28}, "visitsToday": {"type": "integer", "description": "po\u010det n\u00e1v\u0161t\u011bv za dne\u0161ek", "example": 28}, "online": {"type": "integer", "description": "aktu\u00e1ln\u00ed po\u010det online u\u017eivatel\u016f", "example": 28}}, "required": ["rank", "rankCategory", "visitsTotal", "visitsWeek", "visitsToday", "online"]}, "Timeline": {"type": "array", "items": {"type": "array", "items": [{"type": "string", "format": "date", "description": "datum"}, {"type": "integer", "description": "po\u010det"}]}}, "Category": {"type": "object", "properties": {"id": {"type": "integer", "minimum": 0, "format": "int32", "description": "ID nkategorie"}, "parentId": {"type": "integer", "format": "int32", "description": "ID nad\u0159azen\u00e9 kategorie"}, "title": {"type": "string", "description": "n\u00e1zev kategorie"}}, "required": ["id", "title"]}, "Stat": {"type": "object", "properties": {"toplistId": {"type": "integer", "minimum": 1, "format": "int32"}, "dateFrom": {"type": "string", "format": "date", "description": "za\u010d\u00e1tek obdob\u00ed"}, "dateTo": {"type": "string", "format": "date"}, "step": {"type": "string", "enum": ["day", "week", "month", "year"]}, "maxRows": {"type": "integer", "format": "int32", "default": 1000, "minimum": 1, "maximum": 10000, "description": "maxim\u00e1ln\u00ed po\u010det \u0159\u00e1dek v\u00fdsledk\u016f"}}, "required": ["toplistId", "dateFrom", "dateTo", "step", "stats", "maxRows"]}}}
+# This is an **example** API to demontstrate features of OpenAPI specification.
+# It doesn't cover all OpenAPI features. For more full example check out: https://github.com/APIs-guru/petstore_extended
+
+swagger: '2.0'
+# You should specify common part of your endpoints in the following format:
+#   <schemes>://<host><basepath>
+schemes:
+  - http # Remove if your API doesn't support HTTP
+  - https # Remove if your API donsn't support HTTPS
+host: example.com # Replace with your hostname. You can also specify port e.g. example.com:777
+basePath: /api/v1 # Replace with your basePath. Note: SHOULD begin with '/'.
+info:
+  # Describe your API here, you can use GFM (https://guides.github.com/features/mastering-markdown) here
+  description: |
+    This is an **example** API to demontstrate features of OpenAPI specification
+    # Introduction
+    This specification is intended to to be a good starting point for describint your API in 
+    [OpenAPI/Swagger format](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md).
+    It also demonstrates features of [generator-openapi-repo](https://github.com/Rebilly/generator-openapi-repo) tool and 
+    [ReDoc](https://github.com/Rebilly/ReDoc) documentation engine. So beyond the standard OpenAPI syntax we use a few 
+    [vendor extensions](https://github.com/Rebilly/ReDoc/blob/master/docs/redoc-vendor-extensions.md).
+    
+    # OpenAPI Specification
+    The goal of The OpenAPI Specification is to define a standard, language-agnostic interface to REST APIs which
+    allows both humans and computers to discover and understand the capabilities of the service without access to source
+    code, documentation, or through network traffic inspection. When properly defined via OpenAPI, a consumer can 
+    understand and interact with the remote service with a minimal amount of implementation logic. Similar to what
+    interfaces have done for lower-level programming, OpenAPI removes the guesswork in calling the service.
+
+  version: '1.0.0' # Your API version
+  # It can be any string but it is better to use semantic versioning: http://semver.org/
+  # Warning: OpenAPI require version to be string, but without quotation YAML can recognize it as number.
+
+  title: Example.com # Replace with your API title
+  # Keep it simple. Don't add "API" or verison at the end of the string.
+
+  termsOfService: 'https://example.com/terms/' # [Optional] Replace with an URL to your ToS
+  contact:
+    email: contact@example.com # [Optional] Replace with your contact email
+    url: 'http://example.com/contact' # [Optional] Replace with link to your contact form
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  x-logo:
+    url: 'https://apis.guru/openapi-template/logo.png'
+externalDocs:
+  description: Find out how to create Github repo for your OpenAPI spec.
+  url: 'https://github.com/Rebilly/generator-openapi-repo'
+produces:
+  # List of mime types your API endpoins can return.
+  # This is a global default. You can OVERWRITE it in each specific operation.
+  # Remove the ones not used in your API
+  - application/json
+  - application/xml
+  - text/csv
+  # you can add any mime type your API produces to the list
+consumes:
+  # List of mime types your API endpoins consumes.
+  # This is a global default. You can OVERWRITE it in each specific operation.
+  # Remove the ones not supported by your API
+  - application/json
+  - application/xml
+  # you can add any mime type your API consumes to the list
+
+# A list of tags used by the specification with additional metadata.
+# The order of the tags can be used to reflect on their order by the parsing tools.
+tags:
+  - name: Echo
+    description: Example echo operations
+  - name: User
+    description: Operations about user
+# Security scheme definitions that can be used across the specification.
+securityDefinitions:
+  main_auth: # security definition name (you can name it as you want)
+    type: oauth2 # authorization type, one of: oauth2, basic, apiKey
+    # the following options are specific to oauth2 type
+    authorizationUrl: 'http://example.com/api/oauth/dialog'
+    flow: implicit
+    scopes:
+      'read:users': read users info
+      'write:users': modify or remove users
+  api_key: # security definition name (you can name it as you want)
+    type: apiKey
+    # The following options are specific to apiKey type
+    in: header # Where API key will be passed: header or query
+    name: api_key # API key paramteer name
+  basic_auth: # security definition name (you can name it as you want)
+    type: basic
+
+# Holds the relative paths to the individual endpoints. The path is appended to the
+# basePath in order to construct the full URL. 
+paths:
+  '/users/{username}': # path parameter in curly braces
+    # documentation for GET operation for this path
+    
+    # parameters list that are used with each operation for this path
+    parameters:
+      - name: pretty_print
+        in: query # place where paramter is passed: path, header, query or body, formData
+        description: Pretty print response
+        # type of the paramter: string, number, integer, boolean, array
+        type: boolean
+    get:
+      tags:
+        - User
+      
+      # summary is up to 120 symbold but we recommend to be shortest as possible
+      summary: Get user by user name
+      
+      # you can use GFM in operation description too: https://guides.github.com/features/mastering-markdown
+      description: | 
+        Some description of the operation. 
+        You can use `markdown` here.
+      
+      # operationId should be unique across the whole specification
+      operationId: getUserByName
+      
+      # list of parameters for the operation
+      parameters:
+        - name: username
+          in: path
+          description: 'The name that needs to be fetched'
+          required: true
+          type: string
+        - name: with_email
+          in: query
+          description: Filter users without email
+          type: boolean
+      
+      # security schemas applied to this operation
+      security:
+        - main_auth:
+          - 'read:users' # for auth2 provide list of scopes here
+        - api_key: []
+      # overwriting default global produces
+      produces:
+        - application/json
+      responses: # list of responses
+        '200':
+          description: Success
+          schema: # response schema can be specified for each response
+            $ref: '#/definitions/User'
+          examples:
+          # repsonse samples for each type operation produces
+            application/json:
+              username: user1
+              email: user@example.com
+        '403':
+          description: Forbidden
+        '404':
+          description: User not found
+    # documentation for PUT operation for this path
+    put:
+      tags:
+        - User
+      summary: Updated user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      produces:
+        - application/json
+      parameters:
+        - name: username
+          in: path
+          description: The name that needs to be updated
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Updated user object
+          required: true
+          # for body parameter you should specify request schema instead of type
+          schema:
+            $ref: '#/definitions/User'
+      security:
+        - main_auth:
+          - 'write:users'
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Invalid user supplied
+        '404':
+          description: User not found
+  
+  '/echo':
+    post:
+      tags:
+        - Echo
+      summary: Echo test
+      description: Receive the exact message you've sent
+      operationId: echo
+      parameters:
+        - name: message
+          in: body
+          description: 'Echo payload'
+          required: true
+          schema:
+            type: string
+            example: 'Hello world!'
+      security:
+        - api_key: []
+      responses:
+        '200':
+          description: 'OK'
+          examples:
+            'application/json': 'Hello world!'
+          schema:
+            type: string
+          # docuemnt headers for this repsonse
+          headers:
+            X-Rate-Limit: # Header name
+              type: integer # Header value type
+              format: int32 # Header value format
+              description: calls per hour allowed by the user
+            X-Expires-After:
+              type: string
+              format: date-time
+              description: date in UTC when token expires
+# An object to hold data types that can be consumed and produced by operations.
+# These data types can be primitives, arrays or models.
+definitions:
+  Email:
+    description: User email address
+    type: string
+    format: email
+    example: john.smith@example.com
+  User:
+    type: object
+    properties:
+      username:
+        description: User supplied username
+        type: string
+        minLength: 4
+        example: John78
+      firstName:
+        description: User first name
+        type: string
+        minLength: 1
+        example: John
+      lastName:
+        description: User last name
+        type: string
+        minLength: 1
+        example: Smith
+      email:
+        $ref: '#/definitions/Email'

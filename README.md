@@ -1,4 +1,4 @@
-# TOPlist OpenAPI Specification
+# TOPlist Profi OpenAPI Specification
 [![Build Status](https://travis-ci.org/toplist-cz/api.svg?branch=master)](https://travis-ci.org/toplist-cz/api)
 
 ## Steps to finish
